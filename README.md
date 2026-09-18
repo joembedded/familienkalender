@@ -2,6 +2,8 @@
 
 Ein kleiner gemeinsamer Kalender für Geburtstage, Hochzeitstage und andere wichtige Anlässe. Alle Mitglieder haben dieselben Rechte, melden sich aber mit eigenen Konten an. Ein täglicher CRON-Aufruf verschickt die Erinnerungen an die ganze Gruppe.
 
+![Vorschau des Familienkalenders mit Beispielterminen](img/screenshot.png)
+
 Die Anwendung benötigt **PHP 8.1 oder neuer auf einem 64-Bit-System**, Apache, JavaScript im Browser und einen für PHP `mail()` eingerichteten Maildienst. Keine Datenbank, kein Composer, kein npm-Build. Alle Dateien für den Betrieb liegen in **`src/`**.
 
 ## Was der Kalender kann
@@ -130,3 +132,7 @@ python tests/integration.py --base-url http://localhost/familienkalender/
 Die PHP-Tests arbeiten mit temporären Daten und simuliertem Mailversand. Die HTTP-Tests benötigen Apache unter der angegebenen Projektadresse. Sie legen eine nur lokal zugängliche Testinstallation unter `output/` an und entfernen sie nach erfolgreichem Abschluss. Mit `--keep-fixture` bleibt diese für Browserprüfungen erhalten. Weder echte Zugangsdaten noch echte Mails sind für diese Tests erforderlich.
 
 JSON-Änderungen werden unter Dateisperre über eine temporäre Datei geschrieben. Ein Versionsvergleich verhindert, dass zwei Personen gleichzeitig denselben Listenstand still überschreiben. Regelmäßige Backups von `config.php` und `data/` sind sinnvoll; der JSON-Download in der Oberfläche sichert ausschließlich die Termine.
+
+## Lizenz
+
+Dieses Projekt steht unter der [MIT-Lizenz](LICENSE).
