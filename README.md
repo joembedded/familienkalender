@@ -19,13 +19,13 @@ Die Anwendung benötigt **PHP 8.1 oder neuer auf einem 64-Bit-System**, Apache, 
 
 ## Öffentliche Vorlage und private Installation
 
-Im Repository stehen nur neutrale Vorlagen und drei ausdrücklich öffentliche Beispieltermine:
+Im Repository stehen nur neutrale Vorlagen und drei Beispieltermine:
 
 | Name / Anlass | Datum | Jahr |
 | --- | --- | --- |
-| Mama · Geburtstag | 3. Februar | 1964 |
-| Papa · Geburtstag | 16. September | 1964 |
-| Hochzeitstag | 3. Juli | 1993 |
+| Mama · Geburtstag | 16. September | 1964 |
+| Papa · Geburtstag | 3. Februar | 1964 |
+| Hochzeitstag | 3. August | 1994 |
 
 Die Beispielkonten heißen `mama` und `papa`; ihre Platzhalter-Adressen sind `mama@familie.xyz` und `papa@familie.xyz`. Das gemeinsame **Startpasswort lautet `familienkalender`**. Es dient nur zur ersten Anmeldung und muss von jedem Mitglied durch ein eigenes Passwort ersetzt werden. Solange das nicht geschehen ist, sind Termine, Mitgliederliste, Export und gemeinsame Einstellungen für dieses Konto gesperrt.
 

@@ -1,5 +1,5 @@
 [
-    {"id":"mama-geburtstag","name":"Mama","day":3,"month":2,"year":1964,"occasion":"Geburtstag","notes":"","repeat":"yearly","remind_before":0,"enabled":true},
-    {"id":"papa-geburtstag","name":"Papa","day":16,"month":9,"year":1964,"occasion":"Geburtstag","notes":"","repeat":"yearly","remind_before":0,"enabled":true},
+    {"id":"papa-geburtstag","name":"Papa","day":3,"month":2,"year":1964,"occasion":"Geburtstag","notes":"","repeat":"yearly","remind_before":0,"enabled":true},
+    {"id":"mama-geburtstag","name":"Mama","day":16,"month":9,"year":1964,"occasion":"Geburtstag","notes":"","repeat":"yearly","remind_before":0,"enabled":true},
     {"id":"hochzeitstag","name":"Hochzeitstag","day":3,"month":7,"year":1993,"occasion":"Hochzeitstag","notes":"","repeat":"yearly","remind_before":0,"enabled":true}
 ]
