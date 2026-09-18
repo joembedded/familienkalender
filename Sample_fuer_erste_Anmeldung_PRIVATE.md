@@ -1,4 +1,4 @@
-# Private Installation – nicht veröffentlichen
+# Private Installation – (nicht veröffentlichen) - Hier nur ein SAMPLE
 
 Lokal: http://localhost/wrk/familienkalender/src/
 
