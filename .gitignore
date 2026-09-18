@@ -1,4 +1,5 @@
 # Private configuration, uploaded photos and runtime data
+PRIVAT*
 /src/config.php
 /src/assets/hintergrund.jpg
 /src/assets/private-*
@@ -13,3 +14,7 @@
 *.log
 .env
 .env.*
+
+# Dokumentation: Zwischenstände, Rohbilder und PDF-Renderings bleiben lokal.
+# /output/ ist bereits oben ausgeschlossen.
+/tmp/pdfs/
