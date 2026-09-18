@@ -23,9 +23,9 @@ Im Repository stehen nur neutrale Vorlagen und drei Beispieltermine:
 
 | Name / Anlass | Datum | Jahr |
 | --- | --- | --- |
-| Mama · Geburtstag | 16. September | 1964 |
 | Papa · Geburtstag | 3. Februar | 1964 |
 | Hochzeitstag | 3. August | 1994 |
+| Mama · Geburtstag | 16. September | 1964 |
 
 Die Beispielkonten heißen `mama` und `papa`; ihre Platzhalter-Adressen sind `mama@familie.xyz` und `papa@familie.xyz`. Das gemeinsame **Startpasswort lautet `familienkalender`**. Es dient nur zur ersten Anmeldung und muss von jedem Mitglied durch ein eigenes Passwort ersetzt werden. Solange das nicht geschehen ist, sind Termine, Mitgliederliste, Export und gemeinsame Einstellungen für dieses Konto gesperrt.
 
