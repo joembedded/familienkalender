@@ -1,0 +1,5 @@
+Options -Indexes
+DirectoryIndex index.php
+<FilesMatch "^(cron\.php|config(?:\.example)?\.php|.*\.(json|lock|log|bak))$">
+    Require all denied
+</FilesMatch>

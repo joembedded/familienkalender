@@ -1,0 +1,8 @@
+Options -Indexes
+<FilesMatch "^(PRIVATE\.md|.*\.(bak|log))$">
+    Require all denied
+</FilesMatch>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(?:\.git|ausgangsbasis)(?:/|$) - [F,L]
+</IfModule>

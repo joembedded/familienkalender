@@ -1,0 +1,15 @@
+# Private configuration, uploaded photos and runtime data
+/src/config.php
+/src/assets/hintergrund.jpg
+/src/assets/private-*
+/src/data/*
+!/src/data/.htaccess
+!/src/data/termine.example.json
+/ausgangsbasis/
+/output/
+/PRIVATE.md
+/.playwright-cli/
+**/__pycache__/
+*.log
+.env
+.env.*
