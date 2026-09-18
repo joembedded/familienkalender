@@ -1,18 +1,15 @@
 <?php
 declare(strict_types=1);
 require __DIR__ . '/lib/app.php';
-try { web_bootstrap(); } catch (Throwable $e) {
+$pageNonce = base64_encode(random_bytes(18));
+try { web_bootstrap($pageNonce); } catch (Throwable $e) {
     http_response_code(503); header('Content-Type: text/html; charset=utf-8');
     echo '<!doctype html><html lang="de"><meta charset="utf-8"><title>Familienkalender einrichten</title><link rel="stylesheet" href="assets/style.css"><main class="page"><section class="auth-card"><div><h1>Fast bereit.</h1><p>' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . '</p><p>Die Einrichtung ist in der README beschrieben.</p></div></section></main></html>'; exit;
 }
 ?><!doctype html>
 <html lang="de">
 <head>
-    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#147999"><meta name="robots" content="noindex,nofollow">
-    <title>Familienkalender</title>
-    <link rel="icon" type="image/svg+xml" href="assets/family.svg">
-    <link rel="stylesheet" href="assets/style.css"><script src="assets/app.js" defer></script>
+<?php require __DIR__ . '/lib/page-head.php'; ?>
 </head>
 <body>
 <a class="skip-link" href="#main">Zum Kalender</a>

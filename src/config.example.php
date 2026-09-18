@@ -3,6 +3,8 @@
 return [
     'group_name' => 'Unser Familienkalender',
     'sender_email' => 'erinnerung@familie.xyz',
+    // Absolute public installation URL, including trailing slash.
+    // Used for mail links, canonical URLs and social preview image URLs.
     'base_url' => 'https://kalender.example.org/',
     // Optional private photo in src/assets; empty uses the built-in design.
     'background_image' => '',

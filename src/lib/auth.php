@@ -6,10 +6,14 @@ function cookie_options(int $expires): array {
     $path = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/index.php'));
     return ['expires' => $expires, 'path' => rtrim($path, '/') . '/', 'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off', 'httponly' => true, 'samesite' => 'Lax'];
 }
-function web_bootstrap(): void {
+function web_bootstrap(?string $scriptNonce = null): void {
     initialize();
     header('Cache-Control: no-store, private'); header('X-Content-Type-Options: nosniff'); header('Referrer-Policy: no-referrer');
-    header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
+    header('X-Frame-Options: DENY');
+    header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
+    $scriptPolicy = "'self'";
+    if ($scriptNonce !== null) $scriptPolicy .= " 'nonce-" . $scriptNonce . "'";
+    header("Content-Security-Policy: default-src 'self'; script-src $scriptPolicy; style-src 'self'; img-src 'self'; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
     ini_set('session.use_strict_mode', '1'); ini_set('session.use_only_cookies', '1');
     $sessions = data_dir() . '/sessions';
     if (!is_dir($sessions) && !mkdir($sessions, 0700, true) && !is_dir($sessions)) throw new RuntimeException('Sitzung kann nicht angelegt werden.');

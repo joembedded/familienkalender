@@ -3,3 +3,7 @@ DirectoryIndex index.php
 <FilesMatch "^(cron\.php|config(?:\.example)?\.php|.*\.(json|lock|log|bak))$">
     Require all denied
 </FilesMatch>
+
+<IfModule mod_mime.c>
+    AddType application/manifest+json .webmanifest
+</IfModule>

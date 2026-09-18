@@ -98,6 +98,26 @@ Auch noch nicht persönlich eingerichtete Mitglieder erhalten Erinnerungen an ih
 
 `sender_email` aus der privaten Konfiguration wird sowohl im From-Header als auch als technischer Envelope-Absender verwendet. Der Maildienst des Hosters muss diesen Absender erlauben. Die Anwendung verwendet PHP `mail()` und die bestehende SMTP-/Sendmail-Konfiguration des Servers; eigene SMTP-Zugangsdaten werden nicht benötigt. Eine positive Rückmeldung bestätigt die Annahme durch den Maildienst, nicht den Eingang im Postfach. Unter **Einstellungen → Testmail an mich senden** kann jedes Mitglied seine eigene Adresse testen. Passwort-Codes und Testmails funktionieren unabhängig von der globalen Pause für tägliche Erinnerungen.
 
+## Vorschau beim Teilen und App-Symbol
+
+Die Seite liefert bereits im HTML-Header Beschreibung, Canonical-Adresse, Open-Graph-Tags (unter anderem für WhatsApp), eine große Twitter-/X-Karte und strukturierte Daten für Website, Seite und Vorschaubild. Die Struktur orientiert sich an der GEOprecision-Vorlage. Die Inhalte bleiben allgemein; Namen der Familie, Mailadressen und Termine werden nicht in diese Metadaten übernommen. `noindex,nofollow` bleibt für den privaten Kalender gesetzt; das ersetzt keinen Zugangsschutz.
+
+![Vorschaubild für WhatsApp und andere soziale Dienste](src/assets/social-preview.jpg)
+
+**WhatsApp benötigt für das Vorschaubild eine feste, absolute, öffentlich erreichbare HTTPS-URL.** Ein relativer Pfad wie `assets/social-preview.jpg`, eine Datei auf dem eigenen PC oder eine Bildadresse hinter einer Anmeldung reicht dafür nicht aus. Die Anwendung setzt die Adresse aus **`base_url` in der privaten `src/config.php`** und `assets/social-preview.jpg` zusammen. Beispiel:
+
+```php
+'base_url' => 'https://kalender.example.org/meine-familie/',
+```
+
+Damit wird `https://kalender.example.org/meine-familie/assets/social-preview.jpg` in `og:image`, `og:image:secure_url` und `twitter:image` ausgegeben. Die Domain wird bewusst nicht aus dem aktuellen HTTP-Host abgeleitet: Auch lokale Tests geben so die fest konfigurierte Zieladresse aus. Ist `base_url` leer, entfallen die absoluten Social- und Canonical-Angaben. Die konkrete Installationsadresse bleibt in `config.php`; vor einer Veröffentlichung ist deshalb keine temporär fest eingetragene private URL aus dem Quellcode zu entfernen.
+
+Beim Hochladen **`assets/social-preview.jpg`, alle Icon-PNGs und `manifest.webmanifest`** mit übertragen. Das Bild ist ein komprimiertes JPEG mit 1200 × 630 Pixeln. Die Kalender-Startseite und das neutrale Vorschaubild müssen ohne Login abrufbar sein; persönliche Daten bleiben hinter der Kalenderanmeldung. WhatsApp-Vorschauen lassen sich erst mit einer von außen erreichbaren Installation prüfen und können je nach Client, Einstellungen und Cache ausbleiben oder zunächst das alte Bild zeigen. Nach einem Bildwechsel gegebenenfalls den Dateinamen und `$socialImagePath` in `src/lib/page-head.php` ändern.
+
+Das Manifest enthält App-Name, Farben, Startadresse und PNG-Icons mit 192 und 512 Pixeln, zusätzlich ein Maskable-Icon. Ein Apple-Touch-Icon und ein kleines Browser-Icon sind ebenfalls enthalten. Die Manifest-Pfade sind relativ, damit das Kopieren in ein anderes Unterverzeichnis genügt. Es gibt keinen Service Worker und keinen Offline-Modus; für den Kalender ist weiterhin eine Verbindung zum Server erforderlich. Ob eine Installation bzw. „Zum Home-Bildschirm“ angeboten wird, entscheidet der Browser.
+
+Technische Referenzen: [Open Graph](https://ogp.me/), [Web-App-Manifest](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference).
+
 ## Konten und dauerhafte Anmeldung
 
 - Passwörter werden ausschließlich als Hash gespeichert. Passwort- und Mailänderungen benötigen das aktuelle Passwort.
