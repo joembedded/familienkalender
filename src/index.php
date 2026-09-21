@@ -30,13 +30,13 @@ try { web_bootstrap($pageNonce); } catch (Throwable $e) {
             <div class="auth-intro"><span class="eyebrow">EIN PLATZ FÜR EURE ERINNERUNGEN</span><h2 id="auth-title">Willkommen bei uns.</h2><p id="auth-description">Melde dich mit deinem eigenen Konto an. Die schönen Tage teilen wir uns.</p><img src="assets/family.svg" width="84" height="84" alt="Ein Kalender mit Herz"></div>
             <div><form id="auth-form">
                 <label>Deine E-Mail oder Kennung<input name="identity" required maxlength="254" autocomplete="username" placeholder="z. B. mama oder deine Mailadresse"></label>
-                <label id="code-label" hidden>Code aus der E-Mail<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{8}" maxlength="8" placeholder="8-stelliger Code"></label>
+                <label id="code-label" hidden>8-stelliger Passwort-Code aus der E-Mail<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{8}" maxlength="8" placeholder="8-stelliger Passwort-Code"></label>
                 <label><span id="password-label">Dein Passwort</span><input name="password" type="password" required autocomplete="current-password" id="login-password"></label>
                 <label id="confirm-label" hidden>Passwort wiederholen<input name="confirmation" type="password" autocomplete="new-password"></label>
                 <details id="setup-code"><summary>Erste Anmeldung auf dem Server?</summary><label>Privater Einrichtungscode<input name="setup_key" type="password" autocomplete="off"></label><p class="field-help">Den Code erhältst du von der Person, die euren Kalender eingerichtet hat.</p></details>
                 <label class="check" id="remember-label"><input name="remember" type="checkbox" checked> Dauerhaft angemeldet bleiben</label>
                 <p class="form-error" id="auth-error" role="alert" hidden></p><button class="button primary full" id="auth-submit" type="submit">Kalender öffnen →</button>
-            </form><div class="auth-links"><button class="text-button" id="recover">Passwort vergessen?</button><button class="text-button" id="enter-code">Code eingeben</button><button class="text-button" id="back-login" hidden>Zurück zur Anmeldung</button></div><p class="muted small" id="auth-info" role="status"></p></div>
+            </form><div class="auth-links"><button class="text-button" id="recover">Passwort vergessen?</button><button class="text-button" id="enter-code">Passwort-Code eingeben</button><button class="text-button" id="back-login" hidden>Zurück zur Anmeldung</button></div><p class="muted small" id="auth-info" role="status"></p></div>
         </section>
         <section id="welcome-panel" class="auth-card" hidden aria-labelledby="welcome-title">
             <div class="auth-intro"><span class="eyebrow">DEIN EIGENER ZUGANG</span><h2 id="welcome-title">Mach es zu deinem Kalender.</h2><p>Wähle vor dem ersten Blick in eure Termine ein persönliches Passwort. Das veröffentlichte Startpasswort wird dadurch ersetzt.</p><p id="welcome-name" class="account-badge"></p></div>

@@ -1,3 +1,12 @@
+Der ausführende Benutzer muss `data/` lesen und schreiben können.
+
+Alternativ kann ein HTTPS-Cron-Dienst den Erinnerungslauf aufrufen. Dazu den privaten Einrichtungscode als URL-Parameter `setup_key` übergeben:
+
+```text
+https://kalender.example.org/cron.php?setup_key=DEIN_PRIVATER_EINRICHTUNGSCODE
+```
+
+Der Parameter autorisiert den Aufruf und darf weder veröffentlicht noch in Browser-Lesezeichen gespeichert werden. Die URL kann in Protokolldateien des Cron-Dienstes oder Webservers erscheinen; ein echter PHP-CLI-Cron ist deshalb vorzuziehen. Ohne gültigen Code antwortet der Endpunkt mit HTTP 403. Die HTTPS-Adresse funktioniert nur, wenn `cron.php` im Webserver nicht zusätzlich gesperrt wird; die mitgelieferte Apache-Konfiguration lässt genau diesen token-geschützten Zugriff zu.
 # Familienkalender
 
 Ein kleiner gemeinsamer Kalender für Geburtstage, Hochzeitstage und andere wichtige Anlässe. Alle Mitglieder haben dieselben Rechte, melden sich aber mit eigenen Konten an. Ein täglicher CRON-Aufruf verschickt die Erinnerungen an die ganze Gruppe.
@@ -13,7 +22,7 @@ Die Anwendung benötigt **PHP 8.1 oder neuer auf einem 64-Bit-System**, Apache, 
 - Jährliche und einmalige Anlässe, optionales Geburts-/Ursprungsjahr, Notizen und zusätzliche Vorab-Erinnerungen.
 - Erinnerung pro Termin pausieren oder den Versand für alle gemeinsam aussetzen.
 - Den 29. Februar wahlweise am 28. Februar, am 1. März oder nur in Schaltjahren berücksichtigen.
-- Mitglieder hinzufügen und entfernen. Alle Mitglieder können Termine, gemeinsame Einstellungen und die Mitgliederliste verwalten. Das eigene Profil und Passwort ändert jede Person selbst.
+- Mitglieder hinzufügen und entfernen sowie Einladungen an noch nicht eingerichtete Konten erneut senden. Alle Mitglieder können Termine, gemeinsame Einstellungen und die Mitgliederliste verwalten. Das eigene Profil und Passwort ändert jede Person selbst.
 - Dauerhafte Anmeldung, Passwortänderung und persönlicher Reset-Code per Mail.
 - Ruhige, helle Farben, ein Kalender-mit-Herz-Logo und ein optionales eigenes Hintergrundfoto. Auch auf dem Smartphone nutzbar.
 
@@ -57,7 +66,7 @@ Die öffentlichen Gegenstücke sind `src/config.example.php` und `src/data/termi
 5. PHP benötigt Schreibrechte auf `src/data`. Webseite öffnen. Beim ersten Aufruf werden die drei Beispieltermine und die konfigurierten Konten automatisch in privaten JSON-Dateien angelegt.
 6. Mit Kennung (`mama` oder `papa`) bzw. Mailadresse und dem Startpasswort anmelden. **Auf einem entfernten Server ist bei der ersten Anmeldung zusätzlich der private Einrichtungscode nötig.** Direkt über `localhost` am Server entfällt dieser Zusatz. Danach das eigene Passwort festlegen.
 
-Der Einrichtungscode ist nicht öffentlich. Die Person, die den Kalender betreibt, gibt ihn neuen Mitgliedern persönlich weiter. So kann niemand ein noch nicht eingerichtetes Konto allein anhand des bekannten Startpassworts übernehmen. Der Code wird auch beim späteren Hinzufügen eines Mitglieds für dessen erste Remote-Anmeldung verwendet; nach Wahl eines eigenen Passworts wird er nicht mehr benötigt. Alternativ kann ein Mitglied über „Passwort vergessen?“ mit dem Code an seine bereits hinterlegte Mailadresse direkt ein persönliches Passwort setzen.
+Der Einrichtungscode ist nicht öffentlich. Beim Hinzufügen eines Mitglieds geht er zusammen mit dem Startpasswort in einer Einladungsmail an dessen hinterlegte Adresse; solange das Konto noch nicht eingerichtet ist, kann die Einladung im Mitgliederfenster erneut gesendet werden. So kann niemand ein noch nicht eingerichtetes Konto allein anhand des bekannten Startpassworts übernehmen. Nach Wahl eines eigenen Passworts wird der Code für dieses Konto nicht mehr benötigt. Der achtstellige Code im Bereich „Passwort-Code eingeben“ ist dagegen ausschließlich ein zeitlich begrenzter Passwort-Reset-Code: Er wird erst nach „Passwort vergessen?“ per separater Reset-Mail erzeugt und steht nicht in der Einladungsmail.
 
 Die Werte unter `initial_members`, `timezone` und `mail_enabled` in der Konfiguration werden nur bei der ersten Erstellung von `data/setup.json` übernommen. Spätere Kontoänderungen erfolgen in der Oberfläche. Absender, Kalenderadresse, Gruppentitel, Einrichtungscode und Bildpfad werden weiterhin aus `config.php` gelesen. Daten werden bei normalen Neustarts und Updates nicht zurückgesetzt.
 
@@ -90,7 +99,19 @@ Auf einem Linux-Server beispielsweise täglich um 07:00 Uhr (Pfad anpassen):
 0 7 * * * /usr/bin/php /var/www/familienkalender/cron.php >> /var/log/familienkalender.log 2>&1
 ```
 
-Hier wird angenommen, dass der **Inhalt** von `src` nach `/var/www/familienkalender` kopiert wurde. CRON verwendet die Zeitzone des Schedulers; die Terminberechnung verwendet die im Kalender eingestellte Zeitzone. Für 07:00 Uhr deutscher Ortszeit beide auf `Europe/Berlin` abstimmen. Der ausführende Benutzer muss `data/` lesen und schreiben können. `cron.php` ist ausschließlich für die Kommandozeile zugänglich.
+Hier wird angenommen, dass der **Inhalt** von `src` nach `/var/www/familienkalender` kopiert wurde. CRON verwendet die Zeitzone des Schedulers; die Terminberechnung verwendet die im Kalender eingestellte Zeitzone. Für 07:00 Uhr deutscher Ortszeit beide auf `Europe/Berlin` abstimmen. Der ausführende Benutzer muss `data/` lesen und schreiben können.
+
+### Cron-Light per HTTPS
+
+Ein Cron-Light-Job kann den Erinnerungslauf täglich per HTTPS auslösen. Als Ziel-URL wird die öffentliche Adresse von `cron.php` verwendet; den privaten Einrichtungscode aus `config.php` als Query-Parameter `setup_key` ergänzen:
+
+```text
+https://kalender.example.org/cron.php?setup_key=DEIN_PRIVATER_EINRICHTUNGSCODE
+```
+
+In Cron-Light daher täglich die vollständige URL als HTTP-GET-Aufruf eintragen. Ein erfolgreicher Lauf liefert JSON wie `{"status":"sent","sent":2,"failed":0}`; bei ausstehenden Erinnerungen und einem fehlgeschlagenen Empfänger antwortet `cron.php` mit HTTP 500. Ohne oder mit falschem `setup_key` antwortet der Endpunkt mit HTTP 403.
+
+Der Einrichtungscode autorisiert diesen Aufruf und darf nicht veröffentlicht, per E-Mail weitergegeben oder in Browser-Lesezeichen gespeichert werden. Die vollständige URL kann in Protokollen von Cron-Light oder des Webservers erscheinen. Deshalb ist ein echter PHP-CLI-Cron weiterhin die vorzuziehende Variante. Die mitgelieferte Apache-Konfiguration lässt den geschützten HTTPS-Aufruf von `cron.php` zu; bei Nginx muss der Zugriff auf `cron.php` entsprechend erlaubt bleiben.
 
 Jedes Mitglied erhält eine **eigene Sammelmail** mit allen für diesen Tag fälligen Erinnerungen. Notizen stehen ebenfalls in der Mail. Eine erfolgreiche Übergabe wird sofort pro Mitglied und Anlass gespeichert. Bei einem Fehler werden die anderen Empfänger trotzdem versucht; der Prozess endet dann mit Exit-Code 1. Ein weiterer Aufruf wiederholt nur die noch nicht erfolgreich übergebenen Erinnerungen. Parallele Läufe werden durch eine Sperre verhindert. Ohne Termine gibt es keine Mail. Ausgefallene Tage werden nicht nachträglich zugestellt. Ein Prozessabbruch genau zwischen Mailannahme und Protokollierung kann dennoch eine Wiederholung verursachen.
 
@@ -125,7 +146,7 @@ Technische Referenzen: [Open Graph](https://ogp.me/), [Web-App-Manifest](https:/
 - Login-Tokens sind serverseitig für 100 Jahre gültig und werden bei Nutzung verlängert. Der Browser-Cookie wird bei jedem Besuch erneut für 400 Tage gesetzt. Browser können Cookies früher löschen oder die Laufzeit begrenzen; jahrzehntelange Anmeldung ohne weitere Besuche ist deshalb nicht garantiert.
 - Wiederherstellungscodes gelten 15 Minuten, nur einmal und nur für das zugehörige Konto. Falsche Versuche werden begrenzt.
 - Alle Konten haben dieselben Gruppenrechte. Mitgliederverwaltung benötigt zur Bestätigung das eigene Passwort. Das eigene Konto kann nicht über „Entfernen“ gelöscht werden; so bleibt immer mindestens ein Konto bestehen.
-- Neue Mitglieder melden sich mit ihrer Mailadresse und dem Startpasswort an. Es werden keine automatischen Einladungsmails verschickt.
+- Neue Mitglieder erhalten beim Hinzufügen eine Einladungsmail mit ihrer Mailadresse, dem Startpasswort und dem Einrichtungscode. Eine erfolgreiche Rückmeldung bestätigt nur die Annahme durch PHP `mail()`, nicht den Eingang im Postfach. Solange noch kein persönliches Passwort gesetzt wurde, kann jedes Mitglied die Einladung im Mitgliederfenster erneut senden; der Versand ist auf fünf Versuche pro Stunde und Konto begrenzt.
 
 Falls Mailwiederherstellung nicht möglich ist, kann die Person mit Serverzugang den Hash **des einzelnen betroffenen Kontos** in `data/setup.json` ersetzen: einen neuen Hash per `password_hash()` erzeugen, `auth_version` neu zufällig setzen sowie `remember_tokens` und `reset` dieses Kontos leeren. Vorher die Datei sichern. Andere Nutzerkonten und Termine müssen dafür nicht gelöscht werden.
 

@@ -124,7 +124,7 @@ try {
         }); reply(['ok' => true]);
     }
     if ($action === 'add_member' || $action === 'remove_member') {
-        update_json('setup', function (&$current) use ($input, $user, $action) {
+        $member = update_json('setup', function (&$current) use ($input, $user, $action) {
             $actor = require_fresh_user($current, $user);
             if (!password_verify((string)($input['current_password'] ?? ''), $actor['password_hash'])) throw new InvalidArgumentException('Bitte dein aktuelles Passwort zur Bestätigung eingeben.');
             if ($action === 'remove_member') {
@@ -132,14 +132,31 @@ try {
                 if ($id === $actor['id']) throw new InvalidArgumentException('Das eigene Konto kann hier nicht entfernt werden.');
                 if (!isset($current['users'][$id])) throw new InvalidArgumentException('Mitglied nicht gefunden.');
                 unset($current['users'][$id]);
+                return null;
             } else {
                 $email = valid_email($input['email'] ?? ''); $name = text_value($input['name'] ?? '', 100, 'Name');
                 if ($name === '') throw new InvalidArgumentException('Bitte einen Namen angeben.');
                 foreach ($current['users'] as $other) if (strcasecmp($email, $other['email']) === 0) throw new InvalidArgumentException('Diese Mailadresse wird bereits verwendet.');
                 if (count($current['users']) >= 100) throw new InvalidArgumentException('Maximal 100 Mitglieder pro Kalender.');
-                $id = bin2hex(random_bytes(12)); $current['users'][$id] = new_user($id, $name, $email);
+                $id = bin2hex(random_bytes(12)); return $current['users'][$id] = new_user($id, $name, $email);
             }
-        }); reply(['ok' => true]);
+        });
+        if ($action === 'add_member') {
+            rate_limit('invite_' . $member['id'], 5, 3600);
+            $message = invitation_message($member);
+            $sent = send_mail($member['email'], $message['subject'], $message['body']);
+            reply(['ok' => true, 'message' => $sent ? 'Das Mitglied wurde hinzugefügt und die Einladung an den Maildienst übergeben.' : 'Das Mitglied wurde hinzugefügt, aber PHP mail() hat die Einladung abgelehnt. Du kannst sie später erneut senden.']);
+        }
+        reply(['ok' => true]);
+    }
+    if ($action === 'resend_invitation') {
+        $id = (string)($input['id'] ?? ''); $member = $s['users'][$id] ?? null;
+        if (!$member) throw new InvalidArgumentException('Mitglied nicht gefunden.');
+        if (!$member['must_change_password']) throw new InvalidArgumentException('Für dieses bereits eingerichtete Konto ist keine Einladung mehr nötig.');
+        rate_limit('invite_' . $member['id'], 5, 3600);
+        $message = invitation_message($member);
+        if (!send_mail($member['email'], $message['subject'], $message['body'])) reply(['error' => 'PHP mail() hat den Versand abgelehnt. Bitte SMTP bzw. Sendmail am Server prüfen.'], 503);
+        reply(['ok' => true, 'message' => 'Die Einladung wurde an den Maildienst übergeben.']);
     }
     if ($action === 'test_mail') {
         rate_limit('test_mail_' . $user['id'], 5, 3600);

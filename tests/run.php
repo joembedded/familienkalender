@@ -12,6 +12,8 @@ function day(string $date): DateTimeImmutable { return new DateTimeImmutable($da
 try {
     initialize(); $s = setup(); $events = read_json('termine');
     check(count($s['users']) === 2 && count($events) === 3, 'Zwei Konten und drei öffentliche Beispiele');
+    $invitation = invitation_message($s['users']['mama']);
+    check(str_contains($invitation['body'], $config['setup_key']) && str_contains($invitation['body'], INITIAL_PASSWORD) && str_contains($invitation['body'], $config['base_url']), 'Einladung enthält Zugangsdaten und Kalenderadresse');
     check($s['users']['mama']['password_hash'] !== $s['users']['papa']['password_hash'] && password_verify(INITIAL_PASSWORD, $s['users']['mama']['password_hash']), 'Getrennte Passwort-Hashes und gültiges Startpasswort');
     check($s['users']['mama']['must_change_password'] && $s['users']['papa']['must_change_password'], 'Passwortwechsel für beide erforderlich');
     initialize(); check(setup() === $s && read_json('termine') === $events, 'Initialisierung überschreibt keine Daten');

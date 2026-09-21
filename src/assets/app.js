@@ -52,7 +52,7 @@ function setAuthMode(mode) {
     authMode = mode; errorAt('#auth-error'); $('#auth-info').textContent = '';
     const reset = mode === 'reset';
     $('#auth-title').textContent = reset ? 'Ein neuer Anfang.' : 'Willkommen bei uns.';
-    $('#auth-description').textContent = reset ? 'Trage deinen Code aus der Mail ein und wähle ein neues Passwort.' : 'Melde dich mit deinem eigenen Konto an. Die schönen Tage teilen wir uns.';
+    $('#auth-description').textContent = reset ? 'Trage den achtstelligen Passwort-Code aus der Reset-Mail ein und wähle ein neues Passwort.' : 'Melde dich mit deinem eigenen Konto an. Die schönen Tage teilen wir uns.';
     $('#code-label').hidden = !reset; $('#auth-form').elements.code.required = reset;
     $('#confirm-label').hidden = !reset; $('#auth-form').elements.confirmation.required = reset;
     $('#remember-label').hidden = reset; $('#setup-code').hidden = reset || state.local;
@@ -175,16 +175,36 @@ $('#profile-form').addEventListener('submit', event => {
     }, '#profile-error');
 });
 function renderMembers() {
-    $('#member-list').innerHTML = state.members.map(m => `<div class="member-row"><span class="member-avatar" aria-hidden="true">${esc(m.name.slice(0,1))}</span><div><strong>${esc(m.name)}${m.id === state.user.id ? ' · du' : ''}</strong><span>${esc(m.email)}</span><small>${m.must_change_password ? 'Persönliches Passwort noch ausstehend' : 'Persönlicher Zugang aktiv'}</small></div>${m.id === state.user.id ? '' : `<button class="text-button danger" data-remove-member="${esc(m.id)}">Entfernen</button>`}</div>`).join('');
+    $('#member-list').innerHTML = state.members.map(m => `<div class="member-row"><span class="member-avatar" aria-hidden="true">${esc(m.name.slice(0,1))}</span><div><strong>${esc(m.name)}${m.id === state.user.id ? ' · du' : ''}</strong><span>${esc(m.email)}</span><small>${m.must_change_password ? 'Persönliches Passwort noch ausstehend' : 'Persönlicher Zugang aktiv'}</small></div>${m.must_change_password ? `<button class="text-button" data-resend-invitation="${esc(m.id)}">Einladung senden</button>` : ''}${m.id === state.user.id ? '' : `<button class="text-button danger" data-remove-member="${esc(m.id)}">Entfernen</button>`}</div>`).join('');
 }
-$('#members-open').addEventListener('click', () => { $('#member-form').reset(); errorAt('#member-error'); renderMembers(); $('#members-dialog').showModal(); });
+function memberMailResult() {
+    let result = $('#member-mail-result');
+    if (!result) {
+        result = document.createElement('p'); result.id = 'member-mail-result'; result.className = 'small'; result.setAttribute('role', 'status');
+        $('#member-error').before(result);
+    }
+    return result;
+}
+$('#members-open').addEventListener('click', () => {
+    $('#member-form').reset(); errorAt('#member-error'); memberMailResult().textContent = '';
+    $('#member-form .field-help').textContent = 'Neue Mitglieder erhalten eine Einladung mit Startpasswort und privatem Einrichtungscode. Sie müssen danach ein eigenes Passwort wählen.';
+    renderMembers(); $('#members-dialog').showModal();
+});
 $('#member-form').addEventListener('submit', event => {
     event.preventDefault(); const form = event.currentTarget;
     busy($('[type="submit"]', form), async () => {
-        await api('add_member', Object.fromEntries(new FormData(form))); form.reset(); await refresh(); renderMembers(); toast('Das Mitglied wurde hinzugefügt. Bitte den Einrichtungscode persönlich weitergeben.');
+        const result = await api('add_member', Object.fromEntries(new FormData(form))); form.reset(); await refresh(); renderMembers(); memberMailResult().textContent = result.message;
     }, '#member-error');
 });
 $('#member-list').addEventListener('click', event => {
+    const invitation = event.target.closest('[data-resend-invitation]');
+    if (invitation) {
+        busy(invitation, async () => {
+            memberMailResult().textContent = 'Die Einladung wird an den Maildienst übergeben …';
+            const result = await api('resend_invitation', { id: invitation.dataset.resendInvitation }); $('#member-mail-result').textContent = result.message;
+        }, '#member-error');
+        return;
+    }
     const button = event.target.closest('[data-remove-member]'); if (!button) return;
     const member = state.members.find(m => m.id === button.dataset.removeMember);
     $('#remove-member-form').reset(); $('#remove-member-form').elements.id.value = member.id;

@@ -12,6 +12,13 @@ function send_mail(string $to, string $subject, string $body): bool {
     }
     return @mail($to, $subject, $body, $headers, '-f' . $sender);
 }
+function invitation_message(array $member): array {
+    $c = config();
+    $lines = ["Hallo {$member['name']},", '', 'du wurdest zum Familienkalender eingeladen.', '', 'Für deine erste Anmeldung brauchst du:', "E-Mail-Adresse: {$member['email']}", 'Startpasswort: ' . INITIAL_PASSWORD, 'Privater Einrichtungscode: ' . $c['setup_key'], '', 'Nach der Anmeldung wählst du dein eigenes Passwort.'];
+    if ($c['base_url'] !== '') { $lines[] = ''; $lines[] = 'Kalender öffnen:'; $lines[] = $c['base_url']; }
+    $lines[] = ''; $lines[] = $c['group_name'];
+    return ['subject' => 'Deine Einladung zum Familienkalender', 'body' => implode("\n", $lines)];
+}
 function reminder_message(array $due, array $member, DateTimeImmutable $date): array {
     $lines = ["Guten Morgen, {$member['name']}!", '', 'Diese Anlässe stehen in eurem Familienkalender:', ''];
     foreach ($due as $r) {
