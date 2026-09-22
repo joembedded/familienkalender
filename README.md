@@ -51,6 +51,8 @@ https://kalender.example.org/cron.php?setup_key=DEIN_PRIVATER_EINRICHTUNGSCODE
 
 Den Platzhalter durch den privaten `setup_key` ersetzen. Ohne gültigen Code antwortet der Endpunkt mit HTTP 403. Die URL geheim halten; wegen möglicher URL-Protokolle ist PHP-CLI-Cron vorzuziehen.
 
+Pro Aufruf schreibt `cron.php` einen Eintrag in `data/cron.log`, welches wenn > 50 KiB zu `data/cron_old.log` rotiert wird.
+
 Jedes Mitglied erhält eine eigene Sammelmail mit den fälligen Erinnerungen. Erfolgreiche Sendungen werden protokolliert; erneute Aufrufe wiederholen nur offene Sendungen. Ausgefallene Tage werden nicht nachgeholt. Eine Testmail lässt sich unter **Einstellungen → Testmail an mich senden** auslösen.
 
 Versandvorschau ohne echte Mails:
