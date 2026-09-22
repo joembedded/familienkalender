@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
 require __DIR__ . '/lib/app.php';
 
-function cron_log(string $message): void {
+function cron_log(string $message): void
+{
     $path = data_dir() . '/cron.log';
     $oldPath = data_dir() . '/cron_old.log';
     $entry = '[' . date('Y-m-d H:i:s') . '] ' . $message . PHP_EOL;
@@ -18,8 +20,12 @@ $cli = PHP_SAPI === 'cli';
 try {
     if (!$cli) {
         $setupKey = $_GET['setup_key'] ?? '';
-        if (!is_string($setupKey) || !hash_equals(config()['setup_key'], $setupKey)) { http_response_code(403); exit('Nicht autorisiert.'); }
-        header('Content-Type: application/json; charset=utf-8'); header('Cache-Control: no-store, private');
+        if (!is_string($setupKey) || !hash_equals(config()['setup_key'], $setupKey)) {
+            http_response_code(403);
+            exit('Nicht autorisiert.');
+        }
+        header('Content-Type: application/json; charset=utf-8');
+        header('Cache-Control: no-store, private');
     }
     initialize();
     $options = $cli ? getopt('', ['dry-run', 'date:']) : [];
@@ -38,6 +44,10 @@ try {
 } catch (Throwable $e) {
     cron_log('FEHLER: ' . $e->getMessage());
     if ($cli) fwrite(STDERR, $e->getMessage() . PHP_EOL);
-    else { error_log('Familienkalender-CRON: ' . $e->getMessage()); http_response_code(500); echo json_encode(['error' => 'Erinnerungslauf fehlgeschlagen.'], JSON_UNESCAPED_UNICODE) . PHP_EOL; }
+    else {
+        error_log('Familienkalender-CRON: ' . $e->getMessage());
+        http_response_code(500);
+        echo json_encode(['error' => 'Erinnerungslauf fehlgeschlagen.'], JSON_UNESCAPED_UNICODE) . PHP_EOL;
+    }
     exit(1);
 }
