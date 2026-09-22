@@ -46,6 +46,29 @@ function initialize(): void {
             $s = ['timezone' => $c['timezone'], 'leap_day' => 'feb28', 'mail_enabled' => (bool)$c['mail_enabled'], 'users' => $users];
         });
     }
+    if (!array_key_exists('users', setup())) {
+        update_json('setup', function (&$s) use ($c) {
+            if (array_key_exists('users', $s)) return;
+            // Upgrade the former single-owner format without resetting its password or calendar.
+            $id = null;
+            foreach ($c['initial_members'] as $candidate => $member) {
+                if (strcasecmp((string)($s['email'] ?? ''), $member['email']) === 0) $id = (string)$candidate;
+            }
+            if ($id === null || empty(password_get_info((string)($s['password_hash'] ?? ''))['algo'])) {
+                throw new RuntimeException('Das alte Einzelkonto kann nicht zugeordnet werden. Die bisherige E-Mail muss in config.php unter initial_members stehen. setup.json bitte erhalten.');
+            }
+            $backup = data_dir() . '/setup.legacy-' . date('Ymd-His') . '-' . bin2hex(random_bytes(4)) . '.json';
+            $json = json_encode($s, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR) . "\n";
+            if (file_put_contents($backup, $json, LOCK_EX) !== strlen($json)) throw new RuntimeException('Die Sicherung des alten Kontos ist fehlgeschlagen.');
+            $user = new_user($id, text_value($s['owner'] ?? $c['initial_members'][$id]['name'], 100, 'Name'), valid_email($s['email']));
+            $user['password_hash'] = $s['password_hash'];
+            $user['must_change_password'] = password_verify(INITIAL_PASSWORD, $s['password_hash']);
+            // Old sessions, cookie formats and reset codes cannot be reused for the new account model.
+            $s = ['timezone' => $s['timezone'] ?? $c['timezone'], 'leap_day' => $s['leap_day'] ?? 'feb28',
+                'mail_enabled' => (bool)($s['mail_enabled'] ?? $c['mail_enabled']), 'users' => [$id => $user]];
+        });
+    }
+    if (!is_array(setup()['users']) || !setup()['users']) throw new RuntimeException('Die Mitgliederliste in setup.json ist ungültig. Bitte die Datensicherung prüfen.');
     if (!is_file(data_dir() . '/termine.json')) {
         update_json('termine', function (&$events) {
             if ($events) return;

@@ -6,11 +6,12 @@ Ziel: https://flexgate.org/terminkalender/familie_XXXXX/
 
 Absender: erinnerung@xxx.yyy
 
-Mama: mama@xxx.yyy· Kennung mama
 Papa: papa@yyy.yyy · Kennung papa
 
-Startpasswort für beide: `familienPASSWORT`
-Privater Einrichtungscode für die erste Anmeldung auf dem Server: `123456789123456789123456789`
+Startpasswort für Papa bei einer neuen Installation: `familienkalender`
+Privater Einrichtungscode für die erste Anmeldung auf dem Server: `DEIN_PRIVATER_EINRICHTUNGSCODE` (in config.php durch einen zufälligen Code mit mindestens 24 Zeichen ersetzen)
+
+Nur Papa wird initial angelegt. Weitere Mitglieder werden anschließend über die Oberfläche per E-Mail eingeladen. Lokal auf XAMPP ist kein Mailversand eingerichtet.
 
 Den Code vertraulich weitergeben. Er liegt auch in src/config.php. Bei der lokalen Anmeldung über localhost ist er nicht nötig. Jedes Mitglied muss vor dem Zugriff auf Termine sein eigenes Passwort setzen.
 

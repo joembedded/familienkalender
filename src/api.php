@@ -52,7 +52,7 @@ try {
             require_fresh_user($current, $target);
             $current['users'][$target['id']]['reset'] = ['hash' => $hash, 'expires' => time() + 900, 'attempts' => 0];
         });
-        $body = "Hallo {$target['name']},\n\ndein Code für ein neues Passwort lautet:\n\n$code\n\nEr gilt 15 Minuten und nur einmal. Öffne den Familienkalender und wähle „Code eingeben“.\n" . $c['base_url'] . "\n\nNicht angefordert? Ignoriere diese Mail; dein Passwort bleibt unverändert.\n\n" . $c['group_name'];
+        $body = "Hallo {$target['name']},\n\ndein Code für ein neues Passwort lautet:\n\n$code\n\nEr gilt 15 Minuten und nur einmal. Öffne den Familienkalender und wähle „Reset-Code eingeben“.\n" . $c['base_url'] . "\n\nNicht angefordert? Ignoriere diese Mail; dein Passwort bleibt unverändert.\n\n" . $c['group_name'];
         if (!send_mail($target['email'], 'Dein Passwort-Code für den Familienkalender', $body)) {
             update_json('setup', function (&$current) use ($target, $hash) {
                 if (($current['users'][$target['id']]['reset']['hash'] ?? '') === $hash) $current['users'][$target['id']]['reset'] = null;

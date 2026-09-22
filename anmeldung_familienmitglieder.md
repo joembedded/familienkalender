@@ -1,27 +1,27 @@
 # Willkommen im Familienkalender!
 
-Deine bebilderte Anleitung für die erste Anmeldung - mit privatem Einrichtungscode oder per E-Mail.
+Deine bebilderte Anleitung für die erste Anmeldung - nach einer Einladung per E-Mail.
 
 **Hier geht’s zum Kalender:** [Familienkalender öffnen](https://flexgate.org/terminkalender/familie_wickenh/)
 
-**Stand:** 18. September 2026. Die Bilder stammen von der Live-Seite. Mailadressen und Zugangsdaten sind verdeckt; Laura ist das Beispielmitglied.
+**Stand:** 22. September 2026. Die Bilder zeigen einen früheren Stand der Live-Seite; einzelne Beschriftungen können abweichen. Mailadressen und Zugangsdaten sind verdeckt; Laura ist das Beispielmitglied.
 
 ## Schön, dass du dabei bist!
 
 Geburtstage, besondere Tage und ein guter Grund, aneinander zu denken. Mit deinem eigenen Zugang bist du mittendrin.
 
 > **Zuerst aufgenommen werden**
-> Eine freie Selbstregistrierung gibt es derzeit nicht. Ein bestehendes Mitglied legt dich zuerst mit Name und Mailadresse an. Der private Einladungs- bzw. Einrichtungscode allein erstellt noch kein Konto.
+> Nur Papa legt den Kalender initial an. Weitere Mitglieder werden anschließend per E-Mail eingeladen. Eine freie Selbstregistrierung gibt es derzeit nicht. Ein bestehendes Mitglied legt dich zuerst mit Name und Mailadresse an. Der private Einladungs- bzw. Einrichtungscode allein erstellt noch kein Konto.
 
 1. Ein angemeldetes Mitglied öffnet **Mitglieder** und trägt unter **Ein Mitglied hinzufügen** deinen Vornamen und deine Mailadresse ein.
 2. Es bestätigt mit **seinem eigenen Passwort** und klickt auf **Mitglied hinzufügen**. Alle Mitglieder haben dieselben Kalender- und Verwaltungsrechte.
-3. Danach wählst du einen Weg: **A: Startpasswort + privater Einrichtungscode** (Seite 2) oder **B: Code per E-Mail** (Seite 4).
+3. Du erhältst automatisch eine Einladungsmail. Danach wählst du einen Weg: **A: Startpasswort + privater Einrichtungscode** (Seite 2) oder **B: Code per E-Mail** (Seite 4).
 
 ![Beispiel Laura: Die Aufnahme erfolgt durch ein bestehendes Mitglied.](img/anmeldung-01-mitglied-anlegen.png)
 
 Beispiel Laura: Die Aufnahme erfolgt durch ein bestehendes Mitglied.
 
-Es wird keine Einladungsmail automatisch verschickt. Startpasswort und Einrichtungscode erhältst du persönlich von der Person, die den Kalender betreut.
+Die Einladungsmail enthält Startpasswort, privaten Einrichtungscode und Kalenderlink. Bei einem Versandfehler bleibt das Konto angelegt; ein bestehendes Mitglied kann über **Einladung senden** den Versand wiederholen. Lokal auf XAMPP ist kein Mailversand eingerichtet; auf flexgate.org steht er zur Verfügung.
 
 ![Laura ist als Mitglied aufgenommen; die Mailadresse ist verdeckt.](img/anmeldung-02-laura-aufgenommen.png)
 
@@ -30,7 +30,7 @@ Es wird keine Einladungsmail automatisch verschickt. Startpasswort und Einrichtu
 Dein Konto wurde angelegt? Dann brauchst du deine hinterlegte Mailadresse, das Startpasswort und den privaten Einrichtungscode.
 
 1. Öffne den Familienkalender und trage deine **Mailadresse** sowie das **Startpasswort** ein.
-2. Klappe **Erste Anmeldung auf dem Server?** auf. Trage bei **Privater Einrichtungscode** den persönlich erhaltenen Code ein.
+2. Klappe **Erste Anmeldung auf dem Server?** auf. Trage bei **Privater Einrichtungscode** den vollständigen langen Einrichtungscode aus der Einladungsmail ein.
 3. Wähle **Kalender öffnen →**. Der nächste Schritt ist dein eigenes Passwort (Seite 3).
 
 ![Das Zusatzfeld wird über „Erste Anmeldung auf dem Server?“ geöffnet.](img/anmeldung-03-einrichtungscode.png)
@@ -61,15 +61,15 @@ Auch ohne Startpasswort und Einrichtungscode kannst du deinen Zugang einrichten:
 2. Klicke auf **Passwort vergessen?**. Dieser Weg funktioniert auch für die erste persönliche Einrichtung.
 3. Öffne dein Postfach und gegebenenfalls den Spamordner. In der Mail steht ein **achtstelliger Code**, der **15 Minuten** lang und **nur einmal** gilt.
 
-![„Passwort vergessen?“ startet den E-Mail-Weg; „Code eingeben“ öffnet das Formular.](img/anmeldung-05-mail-anfordern.png)
+![„Passwort vergessen?“ startet den E-Mail-Weg; „Reset-Code eingeben“ öffnet das Formular.](img/anmeldung-05-mail-anfordern.png)
 
-„Passwort vergessen?“ startet den E-Mail-Weg; „Code eingeben“ öffnet das Formular.
+„Passwort vergessen?“ startet den E-Mail-Weg; „Reset-Code eingeben“ öffnet das Formular.
 
 Die Rückmeldung ist absichtlich allgemein: „Falls ein passendes Konto vorhanden ist …“. Sie beweist nicht, dass eine Mail angekommen ist. Keine Mail? Prüfe Adresse und Spamordner und frage ein bestehendes Mitglied, ob dein Konto mit genau dieser Mailadresse angelegt ist.
 
 ## Code rein. Kalender auf!
 
-Zurück im Kalender erscheint das Formular für deinen Mail-Code. Falls nötig, öffnest du es auf der Anmeldeseite über „Code eingeben“.
+Zurück im Kalender erscheint das Formular für deinen Mail-Code. Falls nötig, öffnest du es auf der Anmeldeseite über „Reset-Code eingeben“.
 
 1. Trage dieselbe **Mailadresse** und den **achtstelligen Code aus der E-Mail** ein.
 2. Wähle ein **neues persönliches Passwort mit mindestens 10 Zeichen** und wiederhole es.

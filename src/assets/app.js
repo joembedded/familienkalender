@@ -52,7 +52,7 @@ function setAuthMode(mode) {
     authMode = mode; errorAt('#auth-error'); $('#auth-info').textContent = '';
     const reset = mode === 'reset';
     $('#auth-title').textContent = reset ? 'Ein neuer Anfang.' : 'Willkommen bei uns.';
-    $('#auth-description').textContent = reset ? 'Trage den achtstelligen Passwort-Code aus der Reset-Mail ein und wähle ein neues Passwort.' : 'Melde dich mit deinem eigenen Konto an. Die schönen Tage teilen wir uns.';
+    $('#auth-description').textContent = reset ? 'Trage den achtstelligen Code aus der Passwort-Reset-Mail ein und wähle ein neues Passwort. Dies ist nicht der private Einrichtungscode aus deiner Einladung.' : 'Melde dich mit deinem eigenen Konto an. Die schönen Tage teilen wir uns.';
     $('#code-label').hidden = !reset; $('#auth-form').elements.code.required = reset;
     $('#confirm-label').hidden = !reset; $('#auth-form').elements.confirmation.required = reset;
     $('#remember-label').hidden = reset; $('#setup-code').hidden = reset || state.local;
@@ -187,7 +187,6 @@ function memberMailResult() {
 }
 $('#members-open').addEventListener('click', () => {
     $('#member-form').reset(); errorAt('#member-error'); memberMailResult().textContent = '';
-    $('#member-form .field-help').textContent = 'Neue Mitglieder erhalten eine Einladung mit Startpasswort und privatem Einrichtungscode. Sie müssen danach ein eigenes Passwort wählen.';
     renderMembers(); $('#members-dialog').showModal();
 });
 $('#member-form').addEventListener('submit', event => {
